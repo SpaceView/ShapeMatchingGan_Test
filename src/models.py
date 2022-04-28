@@ -225,7 +225,7 @@ class mySBlock(nn.Module):
         
     def forward(self, x):
         return self.relu(x+self.bn(self.conv(self.myconv(x))))
-    
+
 # Transformation Block
 class SketchGenerator(nn.Module):
     def __init__(self, in_channels = 4, ngf = 32, n_layers = 5):
