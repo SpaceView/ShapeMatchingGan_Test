@@ -6,7 +6,7 @@ Get started by creating a new file or uploading an existing file. We recommend e
 …or create a new repository on the command line
 echo "# ShapeMatchingGan_Test" >> README.md
 git init
-git add README.md
+git add --all OR git add README.md 
 git commit -m "first commit"
 git branch -M main
 git remote add origin_test https://github.com/SpaceView/ShapeMatchingGan_Test.git
