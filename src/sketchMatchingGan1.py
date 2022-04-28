@@ -38,32 +38,6 @@ print('--- create model ---')
 netSketch = SketchModule(opts.GB_nlayers, opts.DB_nlayers, opts.GB_nf, opts.DB_nf, opts.gpu)
 if opts.gpu:
     netSketch.cuda()
-#netSketch.init_networks(weights_init)
-#netSketch.train()
-
-#EXPORT = False
-EXPORT = False
-if EXPORT:
-    netSketch.eval()
-    from torch.autograd import Variable
-    """
-    torch.onnx.export(model, im, f, verbose=False, opset_version=opset,
-                          training=torch.onnx.TrainingMode.TRAINING if train else torch.onnx.TrainingMode.EVAL,
-                          do_constant_folding=not train,
-                          input_names=['images'],
-                          output_names=['output'],
-                          dynamic_axes={'images': {0: 'batch', 2: 'height', 3: 'width'},  # shape(1,3,640,640)
-                                        'output': {0: 'batch', 1: 'anchors'}  # shape(1,25200,85)
-                                        } if dynamic else None)
-    """
-        
-    state_dict = torch.load('../save/GB.ckpt')
-    netSketch.load_state_dict(state_dict, strict=False)
-    dummy_input = Variable(torch.randn(1, 3, 256, 256)).cuda()
-    torch.onnx.export(netSketch, dummy_input, 'netSketch.onnx', verbose=False)    
-    print("export done")
-
-
 netSketch.init_networks(weights_init)
 netSketch.train()
 
@@ -80,7 +54,7 @@ for epoch in range(opts.epochs):
         itr += 1
         t = prepare_text_batch(fname, anglejitter=True) #shape=[16,3,256,256]
         t = to_var(t) if opts.gpu else t
-        losses = netSketch.one_pass(t, [l/4.-1. for l in range(0,9)])      
+        losses = netSketch.one_pass(t, [l/4.-1. for l in range(0,9)])   #[-1.0, -0.75, -0.5, -0.25, 0.0, 0.25, 0.5, 0.75, 1.0]  
         print('Epoch [%d/%d][%03d/%03d]' %(epoch+1, opts.epochs,itr,len(fnames)), end=': ')
         print('LDadv: %+.3f, LGadv: %+.3f, Lrec: %+.3f'%(losses[0], losses[1], losses[2]))
 

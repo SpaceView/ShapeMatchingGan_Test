@@ -35,7 +35,6 @@ opts.text_datasize = 708
 opts.augment_text_path_path = '../data/rawtext/augment'
 opts.augment_text_datasize = 5
 
-
 # data and path
 opts.save_path = '../save/'
 opts.save_name = 'maple'
